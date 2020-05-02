@@ -27,13 +27,31 @@ namespace apiEmail.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddCharacter(AddEmailDto newEmail) {
+        public async Task<IActionResult> AddEmail(AddEmailDto newEmail) {
            return Ok(await this.emailService.AddEmailData(newEmail));
         }
 
+        [HttpPut]
+        public async Task<IActionResult> UpdateEmail(UpdateEmailDto updateEmail)
+        {
+            ServiceResponse<GetEmailDto> serviceResponse = await this.emailService.UpdateEmail(updateEmail);
 
+            if(serviceResponse.Data == null){
+                return NotFound(serviceResponse);
+            }
 
+            return Ok(serviceResponse);
+        }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteEmail(int id){
+            ServiceResponse<List<GetEmailDto>> serviceResponse = await this.emailService.DeleteEmailData(id);
+             if (serviceResponse.Data == null) {
+                    return NotFound(serviceResponse);
+            }
+
+            return Ok(serviceResponse);
+        }
 
     }
 }

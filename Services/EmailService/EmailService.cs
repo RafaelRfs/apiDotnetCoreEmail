@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -44,4 +45,50 @@ public class EmailService : IEmailService
       return serviceResponse;
     }
 
+    public async Task<ServiceResponse<GetEmailDto>> UpdateEmail(UpdateEmailDto updatedEmail)
+    {
+
+        ServiceResponse<GetEmailDto> serviceResponse = new ServiceResponse<GetEmailDto>();
+
+        try{
+
+        EmailData updtEml = mapper.Map<EmailData>(updatedEmail);
+
+        EmailData email = emails.FirstOrDefault(e => e.id == updtEml.id);
+
+        email.id = updtEml.id;
+        email.adress = updtEml.adress;
+        email.from = updtEml.from;
+        email.msg =  updtEml.msg;
+        email.options =  updtEml.options;
+        email.to = updtEml.to;
+
+       serviceResponse.Data = mapper.Map<GetEmailDto>(email);
+
+        }catch(Exception ex){
+            serviceResponse.Success = false;
+            serviceResponse.Message =  ex.Message;
+        }
+
+       return serviceResponse;
+    }
+
+    public async Task<ServiceResponse<List<GetEmailDto>>> DeleteEmailData(int id)
+    {
+        ServiceResponse<List<GetEmailDto>> serviceResponse = new ServiceResponse<List<GetEmailDto>>();
+
+        try{
+            EmailData email = emails.First(e => e.id == id);
+            emails.Remove(email);
+
+            serviceResponse.Data = (emails.Select(e => mapper.Map<GetEmailDto>(e))).ToList();
+
+
+        }catch(Exception ex){
+            serviceResponse.Success = false;
+            serviceResponse.Message =  ex.Message;
+        }
+
+       return serviceResponse; 
+    }
 }
