@@ -20,6 +20,8 @@ public class EmailService : IEmailService
                         DataContext context)
     {
         this.mapper = mapper;
+        context.Database.Migrate();
+
         this.context = context;
     }
 
@@ -85,10 +87,12 @@ public class EmailService : IEmailService
         ServiceResponse<List<GetEmailDto>> serviceResponse = new ServiceResponse<List<GetEmailDto>>();
 
         try{
-            EmailData email = context.Emails.First(e => e.id == id);
+            EmailData email = await context.Emails.FirstAsync(e => e.id == id);
             context.Emails.Remove(email);
+            await context.SaveChangesAsync();
 
             serviceResponse.Data =  serviceResponse.Data = context.Emails.Select(email => mapper.Map<GetEmailDto>(email)).ToList();
+  
 
 
         }catch(Exception ex){
