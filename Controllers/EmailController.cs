@@ -34,7 +34,8 @@ namespace apiEmail.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateEmail(UpdateEmailDto updateEmail)
         {
-            ServiceResponse<GetEmailDto> serviceResponse = await this.emailService.UpdateEmail(updateEmail);
+            ServiceResponse<GetEmailDto> serviceResponse = 
+            await this.emailService.UpdateEmail(updateEmail);
 
             if(serviceResponse.Data == null){
                 return NotFound(serviceResponse);
