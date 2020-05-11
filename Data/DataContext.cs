@@ -12,6 +12,10 @@ public class DataContext : DbContext
         string user = userData[0];
         string pass = userData.Length > 1 ? userData[1] : "";
 
+         //context.Database.Migrate();
+
+         //optionsBuilder.con
+
         String connection = String.Format(
             "Server={0};Port={1};User Id={2};Password={3};Database={4}",
             siteUri.Host,
@@ -27,9 +31,11 @@ public class DataContext : DbContext
         if (!optionsBuilder.IsConfigured)
         {
            if(myEnv.Equals("LOCAL")){
+            Console.WriteLine(" DATABASE: MySql ");     
             optionsBuilder.UseMySql(connection);
             }
            else{
+             Console.WriteLine("DATABASE:  PostgreSql ");        
            optionsBuilder.UseNpgsql(connection);  
             }
         }

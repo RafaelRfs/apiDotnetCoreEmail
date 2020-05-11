@@ -8,7 +8,9 @@ namespace apiEmail
         public AutoMapperProfile()
         {
             CreateMap<EmailData, GetEmailDto>();
-            CreateMap<AddEmailDto, EmailData>();            
+            CreateMap<AddEmailDto, EmailData>();  
+            CreateMap<UpdateEmailDto, EmailData>(); 
+            CreateMap<EmailData,UpdateEmailDto>();              
         }        
     }
 }
