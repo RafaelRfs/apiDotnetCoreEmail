@@ -1,4 +1,6 @@
 public class AddEmailDto{
+
+    public int id {get;set;} = 0;
     public string from {get;set;} = "";
 
     public string adress {get; set;} = "";

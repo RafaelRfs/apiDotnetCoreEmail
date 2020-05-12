@@ -28,6 +28,7 @@ namespace apiEmail.Controllers
 
         [HttpPost]
         public async Task<IActionResult> AddEmail(AddEmailDto newEmail) {
+            newEmail.id = 0;
            return Ok(await this.emailService.AddEmailData(newEmail));
         }
 

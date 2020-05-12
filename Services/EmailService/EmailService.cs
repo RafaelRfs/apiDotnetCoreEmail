@@ -27,10 +27,8 @@ public class EmailService : IEmailService
     public  async Task<ServiceResponse<List<GetEmailDto>>> AddEmailData(AddEmailDto newEmail)
     {
         ServiceResponse<List<GetEmailDto>> serviceResponse = new ServiceResponse<List<GetEmailDto>>();
-       
         EmailData email = mapper.Map<EmailData>(newEmail);
         email.id = 0;
-        Console.Write("ID >> INSERYING >>>>      >>>>>>>>>>>>> "+email.id);
         await context.Emails.AddAsync(email);
         await context.SaveChangesAsync();
         serviceResponse.Data = context.Emails.Select(e => mapper.Map<GetEmailDto>(e)).ToList();

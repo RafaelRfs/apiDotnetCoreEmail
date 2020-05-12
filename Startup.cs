@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 
 namespace apiEmail
@@ -32,9 +33,24 @@ namespace apiEmail
             services.AddScoped<IEmailService, EmailService>();
         }
 
+         private static void UpdateDatabase(IApplicationBuilder app)
+            {
+                using (var serviceScope = app.ApplicationServices
+                     .GetRequiredService<IServiceScopeFactory>()
+                     .CreateScope())
+            {
+                using (var context = serviceScope.ServiceProvider.GetService<DataContext>())
+              {
+                context.Database.Migrate();
+              }
+        }
+    }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DataContext context)
         {
+            UpdateDatabase(app);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -50,6 +66,8 @@ namespace apiEmail
             {
                 endpoints.MapControllers();
             });
+             context.Database.EnsureCreated();
+             context.Database.Migrate();
         }
     }
 }
