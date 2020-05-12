@@ -21,12 +21,16 @@ public class EmailService : IEmailService
     {
         this.mapper = mapper;
         this.context = context;
+        context.Database.Migrate();
     }
 
     public  async Task<ServiceResponse<List<GetEmailDto>>> AddEmailData(AddEmailDto newEmail)
     {
         ServiceResponse<List<GetEmailDto>> serviceResponse = new ServiceResponse<List<GetEmailDto>>();
+       
         EmailData email = mapper.Map<EmailData>(newEmail);
+        email.id = 0;
+        Console.Write("ID >> INSERYING >>>>      >>>>>>>>>>>>> "+email.id);
         await context.Emails.AddAsync(email);
         await context.SaveChangesAsync();
         serviceResponse.Data = context.Emails.Select(e => mapper.Map<GetEmailDto>(e)).ToList();
@@ -51,34 +55,23 @@ public class EmailService : IEmailService
 
     public async Task<ServiceResponse<GetEmailDto>> UpdateEmail(UpdateEmailDto updatedEmail)
     {
-
         ServiceResponse<GetEmailDto> serviceResponse = new ServiceResponse<GetEmailDto>();
-
      try{
-
        EmailData updtEml = mapper.Map<EmailData>(updatedEmail);
-
-       Console.Write("ID >> "+updatedEmail.id);
-       
        EmailData email = await context.Emails.FirstOrDefaultAsync(e => e.id == updatedEmail.id);
-
-        email.id = updtEml.id;
-        email.adress = updtEml.adress;
-        email.from = updtEml.from;
-        email.msg =  updtEml.msg;
-        email.options =  updtEml.options;
-        email.to = updtEml.to;
-
-        context.Emails.Update(email);
-        await context.SaveChangesAsync();
-
+       email.id = updtEml.id;
+       email.adress = updtEml.adress;
+       email.from = updtEml.from;
+       email.msg =  updtEml.msg;
+       email.options =  updtEml.options;
+       email.to = updtEml.to;
+       context.Emails.Update(email);
+       await context.SaveChangesAsync();
        serviceResponse.Data = mapper.Map<GetEmailDto>(email);
-
-        }catch(Exception ex){
+       }catch(Exception ex){
             serviceResponse.Success = false;
             serviceResponse.Message =  ex.Message;
         }
-
        return serviceResponse;
     }
 
@@ -90,10 +83,7 @@ public class EmailService : IEmailService
             EmailData email = await context.Emails.FirstAsync(e => e.id == id);
             context.Emails.Remove(email);
             await context.SaveChangesAsync();
-
             serviceResponse.Data =  serviceResponse.Data = context.Emails.Select(email => mapper.Map<GetEmailDto>(email)).ToList();
-  
-
 
         }catch(Exception ex){
             serviceResponse.Success = false;

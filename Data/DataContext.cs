@@ -3,6 +3,17 @@ using Microsoft.EntityFrameworkCore;
 
 public class DataContext : DbContext
 {
+
+
+#region Required
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.UseIdentityColumns();
+            modelBuilder.UseIdentityAlwaysColumns();
+            Console.WriteLine("Configuravcao de Identidade ");
+        }
+        #endregion
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         string myEnv = Environment.GetEnvironmentVariable("ENVIRONMENT");
@@ -15,6 +26,7 @@ public class DataContext : DbContext
          //context.Database.Migrate();
 
          //optionsBuilder.con
+        // optionsBuilder.ForNpgsqlUseIdentityColumns();
 
         String connection = String.Format(
             "Server={0};Port={1};User Id={2};Password={3};Database={4}",
@@ -27,6 +39,7 @@ public class DataContext : DbContext
             Console.WriteLine(" URI >> "+ uri);
             Console.WriteLine(" Environment >> "+ myEnv);
             Console.WriteLine(" Connection String >> "+connection);
+            Console.WriteLine(" V1 RFS Prod 0.0.1 ");
 
         if (!optionsBuilder.IsConfigured)
         {
