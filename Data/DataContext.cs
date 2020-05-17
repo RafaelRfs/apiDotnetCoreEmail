@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore;
 
 public class DataContext : DbContext
 {
-
-
 #region Required
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -33,22 +31,19 @@ public class DataContext : DbContext
             pass,
             siteUri.PathAndQuery.Replace("/", "")
             );
-            Console.WriteLine(" URI >> "+ uri);
+        
             Console.WriteLine(" Environment >> "+ myEnv);
-            Console.WriteLine(" Connection String >> "+connection);
-            Console.WriteLine(" Driver >>"+driver);
+            Console.WriteLine(" Driver >> "+driver);
             Console.WriteLine(" RFS Prod Version "+version);
 
         if (!optionsBuilder.IsConfigured)
         {
-           if(myEnv.Equals("LOCAL")){
-            Console.WriteLine("DATABASE Schema ===========>  MySql ");     
+           if(myEnv.Equals("LOCAL")){   
             optionsBuilder.UseMySql(connection);
             }
-           else{
-            Console.WriteLine("DATABASE Schema ===========>  PostgreSql ");        
+           else{     
             optionsBuilder.UseNpgsql(@connection);  
-            }
+           }
         }
     }
 

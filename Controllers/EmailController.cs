@@ -51,7 +51,6 @@ namespace apiEmail.Controllers
              if (serviceResponse.Data == null) {
                     return NotFound(serviceResponse);
             }
-
             return Ok(serviceResponse);
         }
 

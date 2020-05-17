@@ -15,7 +15,6 @@ public class EmailService : IEmailService
                 new EmailData { to = "1", msg = "ola mundo Dotnet Core!"}
          };
     
-
     public EmailService(IMapper mapper,
                         DataContext context)
     {

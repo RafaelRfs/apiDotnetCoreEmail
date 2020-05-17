@@ -31,6 +31,10 @@ namespace apiEmail
             services.AddControllers();
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IEmailService, EmailService>();
+            services.AddTransient<IEmailSender, AuthMessageSender>();
+            services.AddMvc();
+            //services.Configure<GetEmailDto>
+
         }
 
          private static void UpdateDatabase(IApplicationBuilder app)

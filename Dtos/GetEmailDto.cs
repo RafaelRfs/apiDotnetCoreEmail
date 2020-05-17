@@ -7,8 +7,14 @@ public class GetEmailDto{
     
     public string to {get;set;} = "";
 
+    public string ccEmail {get;set;} = "";
+
+    public string subject{get;set;} = "";
+
     public string msg {get;set;} = "";
 
     public string options {get;set;} = "";
+
+    public string attachment {get;set;} = null;
 
 }
