@@ -51,6 +51,8 @@ public class AuthMessageSender : IEmailSender
                 mail.Attachments.Add(new Attachment(emailDto.attachment));
             }
 
+            Console.Write("Sending new Email to >>> "+emailDto.to);
+
             using(SmtpClient smtp = new SmtpClient(this.primaryDomain,this.primaryPort)){
                 smtp.Credentials = new NetworkCredential(this.emailSite, this.passSite);
                 smtp.EnableSsl = true;
