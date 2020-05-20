@@ -12,6 +12,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace apiEmail
 {
@@ -31,10 +34,19 @@ namespace apiEmail
             services.AddControllers();
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddMvc();
-            //services.Configure<GetEmailDto>
-
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options => {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("SECRET_KEY")+" DOTNET DA DEPRESSAO")),
+                     ValidateIssuer = false,
+                     ValidateAudience = false
+                };
+            });
         }
 
          private static void UpdateDatabase(IApplicationBuilder app)
@@ -54,18 +66,14 @@ namespace apiEmail
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DataContext context)
         {
             UpdateDatabase(app);
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
             //app.UseHttpsRedirection();
-
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

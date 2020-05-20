@@ -9,9 +9,7 @@ public class AuthMessageSender : IEmailSender
     private GetEmailDto emailDto;
     private string emailSite;
     private string passSite;
-
     private string primaryDomain;
-
     private int primaryPort;
 
     public AuthMessageSender( ){
@@ -27,7 +25,6 @@ public class AuthMessageSender : IEmailSender
        this.Execute();
        return  Task.FromResult(0);
     }
-
 
     public async Task Execute(){
         try{
@@ -63,8 +60,5 @@ public class AuthMessageSender : IEmailSender
             throw ex;
         }
     }
-
-
-
 
 }

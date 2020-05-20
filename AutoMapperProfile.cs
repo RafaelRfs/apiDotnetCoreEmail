@@ -1,6 +1,5 @@
 using AutoMapper;
 
-
 namespace apiEmail
 {
     public class AutoMapperProfile : Profile
@@ -10,7 +9,7 @@ namespace apiEmail
             CreateMap<EmailData, GetEmailDto>();
             CreateMap<AddEmailDto, EmailData>();  
             CreateMap<UpdateEmailDto, EmailData>(); 
-            CreateMap<EmailData,UpdateEmailDto>();              
+            CreateMap<EmailData,UpdateEmailDto>();       
         }        
     }
 }

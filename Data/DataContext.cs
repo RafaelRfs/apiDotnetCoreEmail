@@ -9,9 +9,12 @@ public class DataContext : DbContext
             modelBuilder.Entity<EmailData>()
 		                        .Property(e => e.id)
 		                            .ValueGeneratedOnAdd();
+            modelBuilder.Entity<User>()
+		                        .Property(u => u.Id)
+		                            .ValueGeneratedOnAdd();
+            
         }
         #endregion
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         string myEnv = Environment.GetEnvironmentVariable("ENVIRONMENT");
@@ -32,9 +35,7 @@ public class DataContext : DbContext
             siteUri.PathAndQuery.Replace("/", "")
             );
         
-            Console.WriteLine(" Environment >> "+ myEnv);
-            Console.WriteLine(" Driver >> "+driver);
-            Console.WriteLine(" RFS Prod Version "+version);
+            Console.WriteLine(" Driver >> "+driver+" Environment >> "+ myEnv);
 
         if (!optionsBuilder.IsConfigured)
         {
@@ -50,5 +51,7 @@ public class DataContext : DbContext
 
 public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 public DbSet<EmailData> Emails { get; set; }
+
+public DbSet<User> Users {get;set;}
 
 }
