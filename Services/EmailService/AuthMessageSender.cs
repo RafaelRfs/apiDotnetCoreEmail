@@ -28,17 +28,13 @@ public class AuthMessageSender : IEmailSender
 
     public async Task Execute(){
         try{
-
             MailMessage mail = new MailMessage(){
                 From = new MailAddress(this.emailSite, "Site Test RFS ")
             };
-
             mail.To.Add(new MailAddress(emailDto.to));
-            
             if(!string.IsNullOrEmpty(emailDto.ccEmail)){
             mail.CC.Add(new MailAddress(emailDto.ccEmail));
             }
-
             mail.Subject = emailDto.subject;
             mail.Body = emailDto.msg;
             mail.IsBodyHtml = true;

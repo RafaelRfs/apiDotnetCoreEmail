@@ -36,5 +36,12 @@ public class AuthController: ControllerBase
         }
         return Ok(response);
     }
+
+
+    [HttpPost("Token")]
+    public async Task<IActionResult> verifyToken(){
+        string token = "";
+        return Ok(await LoginService.ValidateToken(token));
+    }
   
 }

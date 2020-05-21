@@ -12,7 +12,6 @@ public class DataContext : DbContext
             modelBuilder.Entity<User>()
 		                        .Property(u => u.Id)
 		                            .ValueGeneratedOnAdd();
-            
         }
         #endregion
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -34,9 +33,6 @@ public class DataContext : DbContext
             pass,
             siteUri.PathAndQuery.Replace("/", "")
             );
-        
-            Console.WriteLine(" Driver >> "+driver+" Environment >> "+ myEnv);
-
         if (!optionsBuilder.IsConfigured)
         {
            if(myEnv.Equals("LOCAL")){   
@@ -51,7 +47,6 @@ public class DataContext : DbContext
 
 public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 public DbSet<EmailData> Emails { get; set; }
-
 public DbSet<User> Users {get;set;}
 
 }

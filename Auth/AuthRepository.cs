@@ -15,7 +15,7 @@ public class AuthRepository : IAuthRepository
     {
         this.context = context;
     }
-
+    
     private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))

@@ -1,30 +1,27 @@
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 public class LoginService{
 
-     private static readonly HttpClient client = new HttpClient();
-
-
-    static async Task Main(string[] args)
-    {
-    await ProcessRepositories();
-    }
-
-private static async Task ProcessRepositories()
+ public static  async Task<string> ValidateToken(string token)
 {
+    try{
+    string tokenUrl = Environment.GetEnvironmentVariable("TOKEN_VALIDATE_URL");
+    HttpClient client = new HttpClient();
     client.DefaultRequestHeaders.Accept.Clear();
-    client.DefaultRequestHeaders.Accept.Add(
-        new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
-    client.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
-
-    var stringTask = client.GetStringAsync("https://api.github.com/orgs/dotnet/repos");
-
-    var msg = await stringTask;
-    Console.Write(msg);
-}
-
-
-
+    client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
+    client.DefaultRequestHeaders.Authorization =
+    new AuthenticationHeaderValue("Bearer", token);
+    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+    Console.WriteLine("[+] Validando token na Api de Login >> "+tokenUrl);
+    return  await client.GetStringAsync(tokenUrl);
+    }
+    catch(Exception e)
+    {
+     Console.WriteLine("ERROR >> "+e.Message);
+     return null;
+    }   
+    }
 }
