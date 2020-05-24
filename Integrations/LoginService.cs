@@ -15,7 +15,6 @@ public class LoginService{
     client.DefaultRequestHeaders.Authorization =
     new AuthenticationHeaderValue("Bearer", token);
     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-    Console.WriteLine("[+] Validando token na Api de Login >> "+tokenUrl);
     return  await client.GetStringAsync(tokenUrl);
     }
     catch(Exception e)

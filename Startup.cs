@@ -1,22 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
 namespace apiEmail
 {
@@ -40,7 +32,7 @@ namespace apiEmail
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddMvc();
-            var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("SECRET_KEY")+" DOTNET DA DEPRESSAO");
+           var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("SECRET_KEY"));
             services.AddAuthentication(x => {
                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -50,7 +42,7 @@ namespace apiEmail
                 options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuerSigningKey = false,
+                    ValidateIssuerSigningKey = true,
                      IssuerSigningKey = new SymmetricSecurityKey(key),
                      ValidateIssuer = false,
                      ValidateAudience = false
@@ -88,28 +80,8 @@ namespace apiEmail
                 .AllowAnyHeader()
             );
 
-           // app.UseAuthentication();
-           
-           var options = new JwtBearerOptions
-           {
-                Audience = "...",
-                Authority = "...",
-                Events = new JwtBearerEvents
-            {
-                OnTokenValidated = context =>
-                {
-            // Add the access_token as a claim, as we may actually need it
-            var accessToken = context.SecurityToken as JwtSecurityToken;
-            if (accessToken != null)
-            {
-               Console.Write("Token >>", accessToken);
-            }
-
-            return Task.CompletedTask;
-            }
-        }
-        };    
-           app.UseAuthentication();
+           // app.UseAuthentication(); 
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {

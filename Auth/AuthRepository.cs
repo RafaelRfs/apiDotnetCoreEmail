@@ -18,7 +18,7 @@ public class AuthRepository : IAuthRepository
     
     private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
+            using (var hmac = new System.Security.Cryptography.HMACSHA256(passwordSalt))
             {
                 var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 for (int i = 0; i < computedHash.Length; i++)
@@ -34,7 +34,7 @@ public class AuthRepository : IAuthRepository
 
     private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt )
     {
-        using(var hmac = new System.Security.Cryptography.HMACSHA512()){
+        using(var hmac = new System.Security.Cryptography.HMACSHA256()){
             passwordSalt = hmac.Key;
             passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
         }
@@ -47,9 +47,9 @@ public class AuthRepository : IAuthRepository
           new Claim(ClaimTypes.Name, user.Username)  
         };
         SymmetricSecurityKey key = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("SECRET_KEY")+" DOTNET DA DEPRESSAO")
+            Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("SECRET_KEY"))
         );
-        SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+        SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
         SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),

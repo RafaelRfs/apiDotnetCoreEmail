@@ -37,11 +37,9 @@ namespace apiEmail.Controllers
         {
             ServiceResponse<GetEmailDto> serviceResponse = 
             await this.emailService.UpdateEmail(updateEmail);
-
             if(serviceResponse.Data == null){
                 return NotFound(serviceResponse);
             }
-
             return Ok(serviceResponse);
         }
 
@@ -53,6 +51,6 @@ namespace apiEmail.Controllers
             }
             return Ok(serviceResponse);
         }
-
+        
     }
 }

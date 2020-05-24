@@ -52,7 +52,7 @@ public class EmailService : IEmailService
 
     public async Task<ServiceResponse<GetEmailDto>> UpdateEmail(UpdateEmailDto updatedEmail)
     {
-        ServiceResponse<GetEmailDto> serviceResponse = new ServiceResponse<GetEmailDto>();
+       ServiceResponse<GetEmailDto> serviceResponse = new ServiceResponse<GetEmailDto>();
      try{
        EmailData updtEml = mapper.Map<EmailData>(updatedEmail);
        EmailData email = await context.Emails.FirstOrDefaultAsync(e => e.id == updatedEmail.id);
