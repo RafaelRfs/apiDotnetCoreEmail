@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,5 +16,9 @@ public class EmailData{
     public string msg {get;set;} 
 
     public string options {get;set;}   
+
+    public string ccEmail {get;set;} = "";
+
+    public DateTime dateCreated{get;set;}
 
 }

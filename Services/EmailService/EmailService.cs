@@ -9,18 +9,23 @@ public class EmailService : IEmailService
 {
     private readonly IMapper mapper;
     private readonly DataContext context;
-    private static List<EmailData> emails = new List<EmailData> {
-                new EmailData(),
-                new EmailData { id=1, msg =" teste lambda 123"},
-                new EmailData { to = "1", msg = "ola mundo Dotnet Core!"}
-         };
-    
     public EmailService(IMapper mapper,
                         DataContext context)
     {
         this.mapper = mapper;
         this.context = context;
         context.Database.Migrate();
+    }
+
+    public  async Task<ServiceResponse<List<GetEmailDto>>> AddEmailData(GetEmailDto newEmail)
+    {
+        ServiceResponse<List<GetEmailDto>> serviceResponse = new ServiceResponse<List<GetEmailDto>>();
+        EmailData email = mapper.Map<EmailData>(newEmail);
+        email.id = 0;
+        await context.Emails.AddAsync(email);
+        await context.SaveChangesAsync();
+        serviceResponse.Data = context.Emails.Select(e => mapper.Map<GetEmailDto>(e)).ToList();
+        return  serviceResponse;
     }
 
     public  async Task<ServiceResponse<List<GetEmailDto>>> AddEmailData(AddEmailDto newEmail)
@@ -80,7 +85,7 @@ public class EmailService : IEmailService
             EmailData email = await context.Emails.FirstAsync(e => e.id == id);
             context.Emails.Remove(email);
             await context.SaveChangesAsync();
-            serviceResponse.Data =  serviceResponse.Data = context.Emails.Select(email => mapper.Map<GetEmailDto>(email)).ToList();
+            serviceResponse.Data = context.Emails.Select(email => mapper.Map<GetEmailDto>(email)).ToList();
 
         }catch(Exception ex){
             serviceResponse.Success = false;

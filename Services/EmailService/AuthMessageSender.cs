@@ -6,20 +6,22 @@ using System.Threading.Tasks;
 
 public class AuthMessageSender : IEmailSender
 {
-    private GetEmailDto emailDto;
+    private readonly IEmailService emailService;
+    private AddEmailDto emailDto;
     private string emailSite;
     private string passSite;
     private string primaryDomain;
     private int primaryPort;
 
-    public AuthMessageSender( ){
+    public AuthMessageSender(IEmailService emailService){
         this.emailSite = Environment.GetEnvironmentVariable("APP_SITE_EMAIL");
         this.passSite = Environment.GetEnvironmentVariable("APP_SITE_PASS");
         this.primaryDomain = Environment.GetEnvironmentVariable("PRIMARY_DOMAIN");
         this.primaryPort = Int32.Parse(Environment.GetEnvironmentVariable("PRIMARY_PORT"));
+        this.emailService = emailService;
     }
 
-    public Task SendEmailAsync(GetEmailDto emailDto )
+    public Task SendEmailAsync(AddEmailDto emailDto )
     {
        this.emailDto = emailDto;
        this.Execute();
@@ -44,12 +46,11 @@ public class AuthMessageSender : IEmailSender
                 mail.Attachments.Add(new Attachment(emailDto.attachment));
             }
 
-            Console.Write("Sending new Email to >>> "+emailDto.to);
-
             using(SmtpClient smtp = new SmtpClient(this.primaryDomain,this.primaryPort)){
                 smtp.Credentials = new NetworkCredential(this.emailSite, this.passSite);
                 smtp.EnableSsl = true;
-                await smtp.SendMailAsync(mail);
+                this.emailService.AddEmailData(this.emailDto);
+                await smtp.SendMailAsync(mail) ;  
             }
 
         }catch(Exception ex){

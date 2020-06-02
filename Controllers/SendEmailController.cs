@@ -15,7 +15,7 @@ public class SendEmailController: ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult>  SendEmail(GetEmailDto emailDto) {
+    public async Task<ActionResult>  SendEmail(AddEmailDto emailDto) {
           return  Ok(this.emailSender.SendEmailAsync(emailDto));
     }
 
